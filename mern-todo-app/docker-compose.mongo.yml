@@ -1,0 +1,16 @@
+services:
+  mongo_db:
+    image: mongodb/mongodb-community-server:8.0-ubi8
+    ports:
+      - "127.0.0.1:27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand({ ping: 1 })"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+volumes:
+  mongo-data:
+    name: todo-mongo-data

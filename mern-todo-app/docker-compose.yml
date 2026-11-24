@@ -1,0 +1,25 @@
+include:
+  - ./docker-compose.mongo.yml
+
+services:
+  backend:
+    build: ./backend
+    env_file: ./backend/.env
+    environment:
+      MONGO_URI: mongodb://mongo_db:27017/mern_todo
+      PORT: "8000"
+    ports:
+      - "127.0.0.1:8000:8000"
+    depends_on:
+      mongo_db:
+        condition: service_healthy
+
+  frontend:
+    build: ./frontend
+    environment:
+      HOST: 0.0.0.0
+      BROWSER: none
+    ports:
+      - "127.0.0.1:3000:3000"
+    depends_on:
+      - backend
